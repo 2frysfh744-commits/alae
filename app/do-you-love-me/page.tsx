@@ -80,7 +80,14 @@ export default function DoYouLoveMe() {
             <div className="burst" aria-hidden="true">♥</div>
             <p className="eyebrow">correct answer detected</p>
             <div className="happy-face" aria-hidden="true">(˶ᵔ ᵕ ᵔ˶)</div>
-            <h1>I love me too,<br /><em>dumbass.</em></h1>
+            <div className="punchline">
+              <h1>I love me too,<br /><em>dumbass.</em></h1>
+              <img
+                className="kuromi-sticker"
+                src="/kuromi-middle-finger.png"
+                alt="Kuromi cheekily making a middle finger gesture"
+              />
+            </div>
             <p className="note big-note">Obviously. Now come here and let me annoy you forever. 🖤</p>
             <div className="promise"><span>♥</span> certified mutual obsession <span>♥</span></div>
           </div>
@@ -91,3 +98,4 @@ export default function DoYouLoveMe() {
     </main>
   );
 }
+

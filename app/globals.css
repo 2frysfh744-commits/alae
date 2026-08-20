@@ -51,10 +51,16 @@ h1 em { color:var(--hot); font-weight:900; }
 .yes-page .love-card { box-shadow:13px 15px 0 #070609, 0 28px 100px #e84c9240; }
 .love-test-card { min-height:630px; background:linear-gradient(145deg,#fff8f3 0%,#fff3f8 100%); }
 .love-reveal h1 { font-size:clamp(40px,7.5vw,62px); }
+.punchline { position:relative; display:inline-flex; align-items:center; justify-content:center; }
+.punchline h1 { margin-inline:72px; }
+.kuromi-sticker { position:absolute; left:calc(100% - 70px); bottom:2px; width:112px; height:112px; object-fit:contain; transform:rotate(8deg); filter:drop-shadow(0 8px 8px rgba(44,15,55,.22)); animation:sticker-pop .55s .18s cubic-bezier(.2,1.4,.4,1) both, sticker-wiggle 2.4s 1s ease-in-out infinite; }
+@keyframes sticker-pop { from { opacity:0; transform:rotate(-12deg) scale(.3); } to { opacity:1; transform:rotate(8deg) scale(1); } }
+@keyframes sticker-wiggle { 0%,100% { transform:rotate(8deg); } 50% { transform:rotate(2deg) translateY(-4px); } }
 .web { position:absolute; width:140px; height:140px; opacity:.11; background:repeating-radial-gradient(circle at 0 0,transparent 0 20px,#fff 21px 22px,transparent 23px 34px); z-index:-1; }.web-left{left:0;top:0}.web-right{right:0;bottom:0;transform:rotate(180deg)}
 @keyframes bob { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-7px) rotate(1deg)} }
 @keyframes float { 0%,100%{transform:translateY(0) rotate(-8deg)} 50%{transform:translateY(-18px) rotate(12deg)} }
 @keyframes arrive { from{opacity:0;transform:scale(.85) rotate(-3deg)} to{opacity:1;transform:scale(1)} }
 @keyframes pulse { 50%{transform:scale(1.08);opacity:.65} }
-@media (max-width:600px){.page{padding:24px 12px 42px}.love-card{min-height:620px;padding:38px 24px 28px}.character{transform:scale(.9);margin-top:-4px;margin-bottom:-7px}h1{font-size:46px}.buttons{gap:8px}.yes-button,.no-button{padding:14px 16px}.moon{width:105px;height:105px;right:-12px}.fine-print{margin-top:-28px}}
+@media (max-width:600px){.page{padding:24px 12px 42px}.love-card{min-height:620px;padding:38px 24px 28px}.character{transform:scale(.9);margin-top:-4px;margin-bottom:-7px}h1{font-size:46px}.buttons{gap:8px}.yes-button,.no-button{padding:14px 16px}.moon{width:105px;height:105px;right:-12px}.fine-print{margin-top:-28px}.punchline h1{margin-inline:0 52px}.kuromi-sticker{left:calc(100% - 60px);width:88px;height:88px}}
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.no-button{transform:none!important}}
+
