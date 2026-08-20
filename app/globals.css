@@ -49,6 +49,8 @@ h1 em { color:var(--hot); font-weight:900; }
 .promise span { color:var(--hot); }
 .burst { position:absolute; font-size:360px; color:#f4a8c922; animation:pulse 1.7s ease-in-out infinite; z-index:-1; }
 .yes-page .love-card { box-shadow:13px 15px 0 #070609, 0 28px 100px #e84c9240; }
+.love-test-card { min-height:630px; background:linear-gradient(145deg,#fff8f3 0%,#fff3f8 100%); }
+.love-reveal h1 { font-size:clamp(40px,7.5vw,62px); }
 .web { position:absolute; width:140px; height:140px; opacity:.11; background:repeating-radial-gradient(circle at 0 0,transparent 0 20px,#fff 21px 22px,transparent 23px 34px); z-index:-1; }.web-left{left:0;top:0}.web-right{right:0;bottom:0;transform:rotate(180deg)}
 @keyframes bob { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-7px) rotate(1deg)} }
 @keyframes float { 0%,100%{transform:translateY(0) rotate(-8deg)} 50%{transform:translateY(-18px) rotate(12deg)} }
