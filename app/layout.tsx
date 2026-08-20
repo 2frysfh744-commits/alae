@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "A Tiny Question For You 🖤",
-  description: "A cute little question from someone who adores you.",
+  title: "Just One Question 🖤",
+  description: "A very serious question with only one correct answer.",
   icons: { icon: "/favicon.svg" },
 };
 
