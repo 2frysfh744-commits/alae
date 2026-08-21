@@ -207,7 +207,7 @@ export default function BirthdayHoda() {
             <span className={extras.ticketLabel}>one more birthday surprise</span>
             <h2>Wanna meet up? 💌</h2>
             <div className={extras.dateDetails}>
-              <p><b>14 / 08 / 2026</b><small>the date</small></p>
+              <p><b>15 / 08 / 2026</b><small>the date</small></p>
               <p><b>5:00 PM</b><small>pick-up time</small></p>
             </div>
             <p className={extras.location}>📍 Near the taxi station of Yaacoub Mansour</p>
