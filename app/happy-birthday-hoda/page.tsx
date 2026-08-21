@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./birthday.module.css";
 import extras from "./birthday-extra.module.css";
 import wishStyles from "./wish.module.css";
+import confirmStyles from "./confirm.module.css";
 
 const melody = [
   [261.63,.22],[261.63,.14],[293.66,.4],[261.63,.4],[349.23,.4],[329.63,.75],
@@ -101,33 +102,35 @@ export default function BirthdayHoda() {
   function beginWish() {
     setScene("wish");
     playSong();
-    listenForBlow();
   }
 
-  async function finish() {
+  function finish() {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     streamRef.current?.getTracks().forEach(track => track.stop());
     streamRef.current = null;
     setScene("celebrate");
     setBreath(0);
-    if (wish.trim()) {
-      setWishStatus("sending");
-      try {
-        const response = await fetch("https://formsubmit.co/ajax/massofwar2005@gmail.com", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            _subject: "Hoda made her birthday wish ✨",
-            name: "Hoda’s birthday page",
-            wish: wish.trim(),
-            page: "https://reda-ofyo.vercel.app/happy-birthday-hoda",
-          }),
-        });
-        if (!response.ok) throw new Error("Wish could not be sent");
-        setWishStatus("sent");
-      } catch {
-        setWishStatus("error");
-      }
+  }
+
+  async function confirmWish() {
+    if (!wish.trim() || wishStatus === "sending" || wishStatus === "sent") return;
+    setWishStatus("sending");
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/massofwar2005@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: "Hoda made her birthday wish ✨",
+          name: "Hoda’s birthday page",
+          wish: wish.trim(),
+          page: "https://reda-ofyo.vercel.app/happy-birthday-hoda",
+        }),
+      });
+      if (!response.ok) throw new Error("Wish could not be sent");
+      setWishStatus("sent");
+      listenForBlow();
+    } catch {
+      setWishStatus("error");
     }
   }
 
@@ -168,6 +171,9 @@ export default function BirthdayHoda() {
               rows={3}
             />
             <small>💌 Your wish will be shared with the person who made this page.</small>
+            <button className={confirmStyles.confirmWish} type="button" onClick={confirmWish} disabled={!wish.trim() || wishStatus === "sending" || wishStatus === "sent"}>
+              {wishStatus === "sending" ? "sealing…" : wishStatus === "sent" ? "wish sealed ✓" : wishStatus === "error" ? "try sending again" : "seal my wish 💌"}
+            </button>
           </label>
           <div className={styles.cake} aria-label="A birthday cake with five lit candles">
             <div className={styles.candles}>
@@ -177,10 +183,10 @@ export default function BirthdayHoda() {
             <div className={styles.cakeBody}><span>H O D A</span></div>
             <div className={styles.plate} />
           </div>
-          <p className={styles.instruction}>{micState === "listening" ? "Now blow toward your phone to put out the candles…" : "Allow the microphone, then blow out the candles…"}</p>
+          <p className={styles.instruction}>{wishStatus !== "sent" ? "Seal your wish first, then the candles will listen for your breath…" : micState === "listening" ? "Now blow toward your phone to put out the candles…" : "Allow the microphone, then blow out the candles…"}</p>
           {micState === "listening" && <div className={styles.meter}><span style={{width:`${breath * 100}%`}} /></div>}
           {micState === "denied" && <p className={styles.micNote}>No microphone? That’s okay—tap below instead.</p>}
-          <button className={styles.secondary} onClick={finish}>tap to blow them out 💨</button>
+          {wishStatus === "sent" && <button className={styles.secondary} onClick={finish}>tap to blow them out 💨</button>}
         </section>
       )}
 
