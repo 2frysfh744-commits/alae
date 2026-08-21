@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./birthday.module.css";
 import extras from "./birthday-extra.module.css";
+import wishStyles from "./wish.module.css";
 
 const melody = [
   [261.63,.22],[261.63,.14],[293.66,.4],[261.63,.4],[349.23,.4],[329.63,.75],
@@ -20,6 +21,8 @@ export default function BirthdayHoda() {
   const [micState, setMicState] = useState<"idle" | "listening" | "denied">("idle");
   const [breath, setBreath] = useState(0);
   const [musicOn, setMusicOn] = useState(false);
+  const [wish, setWish] = useState("");
+  const [wishStatus, setWishStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [accepted, setAccepted] = useState(false);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noTries, setNoTries] = useState(0);
@@ -92,12 +95,31 @@ export default function BirthdayHoda() {
     listenForBlow();
   }
 
-  function finish() {
+  async function finish() {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     streamRef.current?.getTracks().forEach(track => track.stop());
     streamRef.current = null;
     setScene("celebrate");
     setBreath(0);
+    if (wish.trim()) {
+      setWishStatus("sending");
+      try {
+        const response = await fetch("https://formsubmit.co/ajax/massofwar2005@iCloud.com", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            _subject: "Hoda made her birthday wish ✨",
+            name: "Hoda’s birthday page",
+            wish: wish.trim(),
+            page: "https://reda-ofyo.vercel.app/happy-birthday-hoda",
+          }),
+        });
+        if (!response.ok) throw new Error("Wish could not be sent");
+        setWishStatus("sent");
+      } catch {
+        setWishStatus("error");
+      }
+    }
   }
 
   function dodgeInvitation() {
@@ -127,6 +149,17 @@ export default function BirthdayHoda() {
         <section className={`${styles.card} ${styles.wishCard}`}>
           <p className={styles.kicker}>close your eyes, Hoda…</p>
           <h1>Make a <em>wish</em></h1>
+          <label className={wishStyles.wishBox}>
+            <span>write your secret wish here</span>
+            <textarea
+              value={wish}
+              onChange={event => setWish(event.target.value)}
+              placeholder="I wish for…"
+              maxLength={180}
+              rows={3}
+            />
+            <small>💌 Your wish will be shared with the person who made this page.</small>
+          </label>
           <div className={styles.cake} aria-label="A birthday cake with five lit candles">
             <div className={styles.candles}>
               {[0,1,2,3,4].map(i => <span className={styles.candle} key={i}><i style={{animationDelay:`${i * -.16}s`}} /></span>)}
@@ -149,6 +182,9 @@ export default function BirthdayHoda() {
           </div>
           <div className={styles.confetti} aria-hidden="true">{confetti.map((piece, i) => <i key={i} style={{left:piece.left,animationDelay:piece.delay,background:piece.color}} />)}</div>
           <p className={styles.kicker}>your wish is on its way ✦</p>
+          {wishStatus === "sending" && <p className={wishStyles.wishSealed}>💫 Sealing and sending your wish…</p>}
+          {wishStatus === "sent" && <p className={wishStyles.wishSealed}>💌 Your wish has been sealed and sent.</p>}
+          {wishStatus === "error" && <p className={wishStyles.wishSealed}>💫 Your wish is sealed, but couldn’t be sent right now.</p>}
           <img className={extras.kuromiCake} src="/kuromi-birthday-cake.png" alt="Kuromi happily holding a birthday cake" />
           <h1>May this year love you as much as <em>you deserve.</em></h1>
           <p>Happy birthday, Hoda. I hope your days are soft, your laughs are loud, and every little wish you made tonight finds its way to you. You make life brighter just by being in it. 💗</p>
