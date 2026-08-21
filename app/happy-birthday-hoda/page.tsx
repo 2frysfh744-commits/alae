@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./birthday.module.css";
+import extras from "./birthday-extra.module.css";
 
 const melody = [
   [261.63,.22],[261.63,.14],[293.66,.4],[261.63,.4],[349.23,.4],[329.63,.75],
@@ -19,6 +20,9 @@ export default function BirthdayHoda() {
   const [micState, setMicState] = useState<"idle" | "listening" | "denied">("idle");
   const [breath, setBreath] = useState(0);
   const [musicOn, setMusicOn] = useState(false);
+  const [accepted, setAccepted] = useState(false);
+  const [noPos, setNoPos] = useState({ x: 0, y: 0 });
+  const [noTries, setNoTries] = useState(0);
   const audioRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -96,8 +100,14 @@ export default function BirthdayHoda() {
     setBreath(0);
   }
 
+  function dodgeInvitation() {
+    const maxX = Math.min(130, window.innerWidth * .24);
+    setNoPos({ x: (Math.random() * 2 - 1) * maxX, y: (Math.random() * 2 - 1) * 75 });
+    setNoTries(value => value + 1);
+  }
+
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} ${extras.pageScroll}`}>
       <div className={styles.glow} />
       <button className={styles.music} onClick={playSong} aria-label="Play the birthday song">
         {musicOn ? "♫ playing…" : "♫ play birthday song"}
@@ -133,13 +143,34 @@ export default function BirthdayHoda() {
       )}
 
       {scene === "celebrate" && (
-        <section className={`${styles.card} ${styles.finalCard}`}>
+        <section className={`${styles.card} ${styles.finalCard} ${extras.expandedFinal}`}>
+          <div className={extras.fireworks} aria-hidden="true">
+            <span>H</span><span>O</span><span>D</span><span>A</span>
+          </div>
           <div className={styles.confetti} aria-hidden="true">{confetti.map((piece, i) => <i key={i} style={{left:piece.left,animationDelay:piece.delay,background:piece.color}} />)}</div>
           <p className={styles.kicker}>your wish is on its way ✦</p>
-          <div className={styles.party}>🎂</div>
+          <img className={extras.kuromiCake} src="/kuromi-birthday-cake.png" alt="Kuromi happily holding a birthday cake" />
           <h1>May this year love you as much as <em>you deserve.</em></h1>
           <p>Happy birthday, Hoda. I hope your days are soft, your laughs are loud, and every little wish you made tonight finds its way to you. You make life brighter just by being in it. 💗</p>
-          <button className={styles.primary} onClick={() => { setScene("wish"); blowFrames.current = 0; listenForBlow(); }}>make another wish</button>
+          <div className={extras.invitation}>
+            <span className={extras.ticketLabel}>one more birthday surprise</span>
+            <h2>A date with me? 💌</h2>
+            <div className={extras.dateDetails}>
+              <p><b>14 / 08 / 2026</b><small>the date</small></p>
+              <p><b>5:00 PM</b><small>pick-up time</small></p>
+            </div>
+            <p className={extras.location}>📍 Near the taxi station of Yaacoub Mansour</p>
+            {!accepted ? (
+              <div className={extras.inviteButtons}>
+                <button className={extras.acceptButton} onClick={() => setAccepted(true)}>Yes, pick me up 💗</button>
+                <button className={extras.runawayButton} style={{transform:`translate(${noPos.x}px, ${noPos.y}px)`}} onMouseEnter={dodgeInvitation} onFocus={dodgeInvitation} onTouchStart={dodgeInvitation} onClick={dodgeInvitation}>
+                  {noTries > 4 ? "nice try 😭" : noTries > 1 ? "too slow" : "No"}
+                </button>
+              </div>
+            ) : (
+              <div className={extras.accepted}>It’s a date! 💞<small>I’ll be there at 5. Don’t keep me waiting.</small></div>
+            )}
+          </div>
         </section>
       )}
     </main>
