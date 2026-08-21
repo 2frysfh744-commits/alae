@@ -1,0 +1,2 @@
+.confirmWish{display:block;margin:12px auto 0;padding:11px 17px;border:2px solid #3d2943;border-radius:999px;background:#ff7096;color:white;box-shadow:3px 4px 0 #3d2943;font:500 10px "DM Mono",monospace;cursor:pointer;transition:.18s}.confirmWish:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:5px 6px 0 #3d2943}.confirmWish:disabled{cursor:default;opacity:.55;box-shadow:2px 2px 0 #3d2943}.confirmWish:disabled:not(:first-child){background:#9b72cf}
+
