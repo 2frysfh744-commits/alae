@@ -104,7 +104,7 @@ export default function BirthdayHoda() {
     if (wish.trim()) {
       setWishStatus("sending");
       try {
-        const response = await fetch("https://formsubmit.co/ajax/massofwar2005@iCloud.com", {
+        const response = await fetch("https://formsubmit.co/ajax/massofwar2005@gmail.com", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
