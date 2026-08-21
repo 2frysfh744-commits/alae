@@ -69,8 +69,10 @@ export default function BirthdayHoda() {
       audioRef.current = ctx;
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 512;
+      analyser.smoothingTimeConstant = .35;
       ctx.createMediaStreamSource(stream).connect(analyser);
       const samples = new Uint8Array(analyser.fftSize);
+      const frequencies = new Uint8Array(analyser.frequencyBinCount);
       setMicState("listening");
 
       const measure = () => {
@@ -78,9 +80,16 @@ export default function BirthdayHoda() {
         let sum = 0;
         for (const value of samples) { const normalized = (value - 128) / 128; sum += normalized * normalized; }
         const level = Math.sqrt(sum / samples.length);
-        setBreath(Math.min(1, level * 7));
-        blowFrames.current = level > .12 ? blowFrames.current + 1 : Math.max(0, blowFrames.current - 1);
-        if (blowFrames.current > 8) { finish(); return; }
+        analyser.getByteFrequencyData(frequencies);
+        let airyEnergy = 0;
+        const airyStart = 22;
+        const airyEnd = Math.min(130, frequencies.length);
+        for (let i = airyStart; i < airyEnd; i++) airyEnergy += frequencies[i];
+        const airyAverage = airyEnergy / (airyEnd - airyStart);
+        const blowDetected = (level > .026 && airyAverage > 9) || level > .07;
+        setBreath(Math.min(1, Math.max(level * 18, airyAverage / 42)));
+        blowFrames.current = blowDetected ? blowFrames.current + 1 : Math.max(0, blowFrames.current - 2);
+        if (blowFrames.current > 5) { finish(); return; }
         rafRef.current = requestAnimationFrame(measure);
       };
       measure();
