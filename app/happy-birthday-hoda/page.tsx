@@ -154,7 +154,7 @@ export default function BirthdayHoda() {
           <p>Happy birthday, Hoda. I hope your days are soft, your laughs are loud, and every little wish you made tonight finds its way to you. You make life brighter just by being in it. 💗</p>
           <div className={extras.invitation}>
             <span className={extras.ticketLabel}>one more birthday surprise</span>
-            <h2>A date with me? 💌</h2>
+            <h2>Wanna meet up? 💌</h2>
             <div className={extras.dateDetails}>
               <p><b>14 / 08 / 2026</b><small>the date</small></p>
               <p><b>5:00 PM</b><small>pick-up time</small></p>
